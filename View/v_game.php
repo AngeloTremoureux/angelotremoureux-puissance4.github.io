@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        <div id="dialog" title="Paramètres" style="">
+        <div id="dialog" title="Paramètres" style="display: none;">
             <label for="nbCaseY">Nombre de cases (Verticale)</label>
             <input type="number" min="4" max="20" step="1" name="nbCaseY" id="nbCaseY" value="<?php echo $game->getNbCase('y'); ?>" class="text ui-widget-content ui-corner-all">
             <label for="nbCaseX">Nombre de cases (Horizontale)</label>

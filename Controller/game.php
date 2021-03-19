@@ -8,8 +8,7 @@ class game {
 
     public function __construct(string $link, int $nbCaseX, int $nbCaseY) {
         $this->linkTemplate = $link;
-        $this->nbCaseX = $nbCaseX;
-        $this->nbCaseY = $nbCaseY;
+        $this->setCase($nbCaseX, $nbCaseY);
     }
 
     public function getTemplate() {
