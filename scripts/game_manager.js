@@ -22,7 +22,6 @@ function searchPiece(name, initCase) {
             return $(basic_circle).html();
         }
     }
-
 }
 
 function clearGame() {

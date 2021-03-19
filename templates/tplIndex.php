@@ -34,7 +34,7 @@
                 </div>
                 <a href="#" onclick="resetGame();">Relancer</a>
                 <a href="#" onclick="clearGame();">Effacer</a>
-                <a href="#" onclick="setBot('yellow');">AutoBot</a>
+                <a href="#" onclick="setBot('yellow');">Robot vs Robot</a>
                 <a href="#" onclick="openParam()">Paramètres</a>
             </div>
         </div>
