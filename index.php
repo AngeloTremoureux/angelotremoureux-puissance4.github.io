@@ -1,16 +1,16 @@
 <?php
 
-try {
-    require('game.php');
-    $game = new game('templates/tplIndex.php');
-    if (isset($_GET['x'], $_GET['y'])) {
-        $game->setCase($_GET['x'], $_GET['y']);
-    } else {
-        $game->setCase(7, 5);
-        
-    }
-    require($game->getTemplate());
-} catch (Exception $ex) {
-    print($ex->getMessage());
+$rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_STRING);
+$rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_STRING);
+if (empty($rowX) || !is_int($rowY)) {
+    $rowX = 7;
 }
-?>
+if (empty($rowY) || !is_int($rowY)) {
+    $rowY = 5;
+}
+
+require('Controller/game.php');
+$game = new game('View/v_game.php', $rowX, $rowY);
+
+require($game->getTemplate());
+
