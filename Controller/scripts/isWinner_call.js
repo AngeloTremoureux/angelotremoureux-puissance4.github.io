@@ -2,6 +2,7 @@ function isWinner_horizontal(Px, Py, Color) {
     // Vérification en horizontal
     let Surbrillance = [];
     let couleur;
+    
     for (let i = 1; i <= Py; i++) {
         let count = 0;
         Surbrillance = [];
