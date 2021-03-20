@@ -1,0 +1,6 @@
+<FilesMatch "error.php">
+Order allow,deny
+Allow from all
+</FilesMatch>
+Order allow,deny
+Deny from all
