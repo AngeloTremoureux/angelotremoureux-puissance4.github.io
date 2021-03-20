@@ -1,6 +1,14 @@
+<FilesMatch "^scripts\/.*\.js$">
+Order allow,deny
+Allow from all
+</FilesMatch>
+
+<FilesMatch "^.*\.php$">
+Order allow,deny
+Deny from all
+</FilesMatch>
+
 <FilesMatch "error.php">
 Order allow,deny
 Allow from all
 </FilesMatch>
-Order allow,deny
-Deny from all

@@ -9,7 +9,7 @@ var jeton = jeton || (function () {
         add: function (event, Py, Px) {
             if (Py <= game.getPy() && Px <= game.getPx())
             {
-                let num = $(event).attr('case');
+                let num = parseInt($(event).attr('case'));
                 let placeIsNotTaken = true;
                 let compteur = Py;
                 if (monTour.get()) {

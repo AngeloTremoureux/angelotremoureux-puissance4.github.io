@@ -1,2 +1,9 @@
+<FilesMatch "^.*\.php$">
 Order allow,deny
 Deny from all
+</FilesMatch>
+
+<FilesMatch "^.*\.css$">
+Order allow,deny
+Allow from all
+</FilesMatch>
