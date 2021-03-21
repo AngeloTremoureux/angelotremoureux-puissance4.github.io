@@ -70,10 +70,10 @@ var jeton = jeton || (function () {
             game.log("Puissance 4", "Les données des pions ont été effacés");
         },
         get: function (team) {
-            if (team == 1)
+            if (team == 1 || team == 'red')
             {
                 return this.listPionTeam1;
-            } else if (team == 2) {
+            } else if (team == 2 || team == 'yellow') {
                 return this.listPionTeam2;
             } else {
                 throw "Le joueur est introuvable";
