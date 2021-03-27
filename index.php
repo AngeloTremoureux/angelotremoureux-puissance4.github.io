@@ -1,7 +1,7 @@
 <?php
 
-$rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_STRING);
-$rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_STRING);
+$rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_NUMBER_INT);
+$rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_NUMBER_INT);
 if (empty($rowX) || !is_int($rowY)) {
     $rowX = 7;
 }

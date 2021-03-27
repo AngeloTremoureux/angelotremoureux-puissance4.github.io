@@ -1,32 +1,71 @@
 function isWinner_horizontal(Px, Py, Color) {
     // Vérification en horizontal
-    let Surbrillance = [];
     let couleur;
-    
-    for (let i = 1; i <= Py; i++) {
-        let count = 0;
-        Surbrillance = [];
-        for (let j = 1; j <= Px; j++) {
+    let retour = false;
+    const maListeDePions = jeton.get(Color);
+    maListeDePions.sort();
+    console.log(Color , "PIONS: " + maListeDePions)
 
-            couleur = $('.row[val="' + i + '"] .icon[case="' + j + '"]').attr('team');
-            if (couleur == Color) {
-                count++;
-                Surbrillance.push([i, j]); // Surbrillance[val][case];
-                if (count >= 4) {
-                    return Surbrillance;
+    var Surbrillance = [];
+
+    maListeDePions.forEach(unPion => {
+        if (Surbrillance.length == 0) {
+            Surbrillance.push(unPion);
+        }
+        else {
+            if (Surbrillance[Surbrillance.length-1][0] == unPion[0]) {
+                if (Surbrillance[Surbrillance.length-1][1] + 1 == unPion[1]) {
+                    console.log("XPUSH1 : " + jeton.listPionTeam1);
+                    Surbrillance.push(unPion);
+                    console.log("YPUSH2 : " + jeton.listPionTeam1);
+                    if (Surbrillance.length >= 4) {
+                        retour = Surbrillance;
+                    }
                 }
-            } else {
-                Surbrillance = [];
-                count = 0;
-
+                else {
+                    Surbrillance = [];
+                    Surbrillance = unPion;
+                }
             }
-
+            else if (Surbrillance[0] == unPion[0]) {
+                // Si la liste est une liste a 1 dimension
+                if (Surbrillance[1] + 1 == unPion[1]) {
+                    console.log("S:" + Surbrillance);
+                    console.log("PUSH1 : " + jeton.listPionTeam1);
+                    
+                    Surbrillance.push(unPion);
+                    console.log("S:" + Surbrillance);
+                    console.log("PUSH2 : " + jeton.listPionTeam1);
+                    //console.log("len:" + Surbrillance.length);
+                    if (Surbrillance.length >= 4) {
+                        //console.log("hmmm.?");
+                        retour = Surbrillance;
+                    }
+                    
+                }
+                else {
+                    Surbrillance = [];
+                    Surbrillance = unPion;
+                }
+            }
+            else {
+                Surbrillance = [];
+                Surbrillance = unPion;
+            }
         }
-        if (count >= 4) {
-            return Surbrillance;
-        }
+        //console.log("Surbrillance: " + Surbrillance)
+    });
+    if (retour) {
+        return retour;
     }
-    return false;
+    else {
+        return false;
+    }
+    
+}
+
+function exists(arr, search) {
+    return arr.some(row => row.includes(search));
 }
 
 function isWinner_vertical(Px, Py, Color) {

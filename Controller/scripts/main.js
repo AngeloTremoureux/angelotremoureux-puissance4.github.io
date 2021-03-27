@@ -51,6 +51,7 @@ var game = game || (function () {
             $("#game .icon").click(function (event) {
                 if (monTour.get()) {
                     jeton.add($(this), Py, Px);
+                    console.log("add!");
                 }
             });
             $("#game .icon").mouseover(function (event) {

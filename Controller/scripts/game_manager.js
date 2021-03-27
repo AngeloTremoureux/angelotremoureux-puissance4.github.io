@@ -33,6 +33,7 @@ function resetGame() {
     let Py = game.getPy();
     clearGame();
     game.createBackground(Px, Py);
+    jeton.init();
     $("#tour").text("A toi de commencer !");
     monTour.set(true);
     $(".icon").attr('style', '');

@@ -1,8 +1,10 @@
 function verifWin(Px, Py, Color) {
+    console.log("V1:" + jeton.listPionTeam1);
     let verification = isWinner_horizontal(Px, Py, Color);
     if (verification) {
         return verification;
     }
+    console.log("V2:" + jeton.listPionTeam1);
     verification = isWinner_vertical(Px, Py, Color);
     if (verification) {
         return verification;
