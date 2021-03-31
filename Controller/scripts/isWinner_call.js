@@ -1,59 +1,119 @@
+/**
+ * Fonction qui retourne la taille d'une liste
+ * @param {Array} liste - Liste a vérifier
+ * @returns int - Taille de la liste
+ */
+
+function GetTailleListe(liste) {
+    return liste.length;
+}
+/**
+ * Fonction qui retourne une liste vide
+ * @returns Array - Liste vide
+ */
+function GetListeVide() {
+    return [];
+}
+/**
+ * Fonction qui vérifie si la taille de la liste > 4
+ * @param {Array} listeJetonAllignes - Liste à vérifier
+ * @returns 
+ */
+function APlusDe4PionsAlignes(listeJetonAllignes) {
+    return GetTailleListe(listeJetonAllignes) >= 4;
+}
+/**
+ * Fonction qui vérifie si le pion est à gauche
+ * du dernier pion d'une liste
+ * @param {Array} listeJetonAllignes - Liste de pions
+ * @param {Array} pion - Pion à vérifier
+ * @returns Boolean - Vrai s'il est à gauche, Faux s'il ne l'est pas
+ */
+function LePionEstIlAGaucheDuDernierPion(listeJetonAllignes, pion) {
+    if (RecupDernierJeton(listeJetonAllignes)[1] != null) {
+        // La liste contient plusieurs sous-listes
+        return RecupDernierJeton(listeJetonAllignes)[1] + 1 == pion[1]
+    }
+    else {
+        // La liste contient uniquement 1 sous-liste
+        return listeJetonAllignes[1] + 1 == pion[1]
+    }
+}
+/**
+ * Fonction qui récupère le dernier pion
+ * d'une liste de pions
+ * @param {Array} listeJetonAllignes - Liste
+ * @returns Boolean
+ */
+function RecupDernierJeton(listeJetonAllignes) {
+    return listeJetonAllignes[listeJetonAllignes.length-1];
+}
+/**
+ * Fonction qui vérifie si le dernier pion d'une liste
+ * est sur la même colonne (Y) qu'un pion donné
+ * @param {Array} listeJetonAllignes 
+ * @param {Array} pion 
+ * @returns Boolean
+ */
+function EstSurLaMemeColonne(listeJetonAllignes, pion) {
+    // Si la liste est une liste a 1 dimension
+    if (RecupDernierJeton(listeJetonAllignes)[0] != undefined) {
+        return RecupDernierJeton(listeJetonAllignes)[0] == pion[0]
+    }
+    else {
+        return listeJetonAllignes[0] == pion[0]
+    }
+}
+/**
+ * Fonction qui vérifie s'il y a un gagnant
+ * au Puissance 4 en vérifiant seulement horizontalement
+ * (Nombre de pions >= 4 sur la même colonne)
+ * @param {BigInteger} Px - Largeur du tableau
+ * @param {BigInteger} Py - Hauteur du tableau
+ * @param {BigInteger} Color - Couleur de l'équipe
+ * @returns Boolean - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
+ */
+
 function isWinner_horizontal(Px, Py, Color) {
     // Vérification en horizontal
     let couleur;
     let retour = false;
     const maListeDePions = jeton.get(Color);
     maListeDePions.sort();
-    console.log(Color , "PIONS: " + maListeDePions)
 
-    var Surbrillance = [];
+    let listeJetonAllignes = [];
 
     maListeDePions.forEach(unPion => {
-        if (Surbrillance.length == 0) {
-            Surbrillance.push(unPion);
+        // Si la liste est vide, on entre le jeton
+        if (GetTailleListe(listeJetonAllignes) == 0) {
+            listeJetonAllignes.push(unPion);
         }
         else {
-            if (Surbrillance[Surbrillance.length-1][0] == unPion[0]) {
-                if (Surbrillance[Surbrillance.length-1][1] + 1 == unPion[1]) {
-                    console.log("XPUSH1 : " + jeton.listPionTeam1);
-                    Surbrillance.push(unPion);
-                    console.log("YPUSH2 : " + jeton.listPionTeam1);
-                    if (Surbrillance.length >= 4) {
-                        retour = Surbrillance;
+            // Si la liste n'est pas vide, et que le jeton est sur la meme colonne
+            // que le jeton précedent
+            if (EstSurLaMemeColonne(listeJetonAllignes, unPion)) {
+                // Si le pion est a gauche du dernier pion, alors on l'ajoute a la liste
+                if (LePionEstIlAGaucheDuDernierPion(listeJetonAllignes, unPion)) {
+                    listeJetonAllignes.push(unPion);
+                    if (APlusDe4PionsAlignes(listeJetonAllignes)) {
+                        // On ne peux pas faire de return car nous sommes dans une
+                        // fonction foreach qui ne retourne rien, alors on
+                        // attribut la valeur de retour à la variable retour
+                        retour = listeJetonAllignes;
                     }
                 }
                 else {
-                    Surbrillance = [];
-                    Surbrillance = unPion;
+                    listeJetonAllignes = GetListeVide();
+                    listeJetonAllignes = unPion;
                 }
             }
-            else if (Surbrillance[0] == unPion[0]) {
-                // Si la liste est une liste a 1 dimension
-                if (Surbrillance[1] + 1 == unPion[1]) {
-                    console.log("S:" + Surbrillance);
-                    console.log("PUSH1 : " + jeton.listPionTeam1);
-                    
-                    Surbrillance.push([unPion]);
-                    console.log("S:" + Surbrillance);
-                    console.log("PUSH2 : " + jeton.listPionTeam1);
-                    //console.log("len:" + Surbrillance.length);
-                    if (Surbrillance.length >= 4) {
-                        //console.log("hmmm.?");
-                        retour = Surbrillance;
-                    }
-                    
-                }
-                else {
-                    Surbrillance = [];
-                    Surbrillance = [unPion];
-                }
-            }
+            // Si le pion est sur une colonne différente (Y différent), alors on
+            // réinitialise la liste et on insère un nouveau pion
             else {
-                Surbrillance = [];
-                Surbrillance = [unPion];
+                listeJetonAllignes = GetListeVide();
+                listeJetonAllignes = [unPion];
             }
         }
-        //console.log("Surbrillance: " + Surbrillance)
     });
     if (retour) {
         return retour;
@@ -61,11 +121,6 @@ function isWinner_horizontal(Px, Py, Color) {
     else {
         return false;
     }
-    
-}
-
-function exists(arr, search) {
-    return arr.some(row => row.includes(search));
 }
 
 function isWinner_vertical(Px, Py, Color) {
@@ -75,10 +130,8 @@ function isWinner_vertical(Px, Py, Color) {
         let couleur, calc, calc2;
         for (let j = 0; j < Py; j++) {
             couleur = $('.row[val] .icon[case="' + (i + 1) + '"]').eq((j)).attr('team');
-            //console.log("verif vertical : case=" + (i + 1) + "val=" + j + "couleur:" + couleur + "count:" + count);
             if (couleur == Color) {
                 calc = i + 1;
-                //console.log("+1 Count : count=" + count);
                 calc2 = j + 1;
                 Surbrillance.push([calc2, calc]);
                 count++;
