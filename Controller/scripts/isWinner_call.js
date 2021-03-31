@@ -40,6 +40,23 @@ function LePionEstIlAGaucheDuDernierPion(listeJetonAllignes, pion) {
     }
 }
 /**
+ * Fonction qui vérifie si le pion est en dessous
+ * du dernier pion d'une liste
+ * @param {Array} listeJetonAllignes - Liste de pions
+ * @param {Array} pion - Pion à vérifier
+ * @returns Boolean - Vrai s'il est en dessous, Faux s'il ne l'est pas
+ */
+function LePionEstIlEnBasDuDernierPion(listeJetonAllignes, pion) {
+    if (RecupDernierJeton(listeJetonAllignes)[0] != null) {
+        // La liste contient plusieurs sous-listes
+        return RecupDernierJeton(listeJetonAllignes)[0] + 1 == pion[0]
+    }
+    else {
+        // La liste contient uniquement 1 sous-liste
+        return listeJetonAllignes[0] + 1 == pion[0]
+    }
+}
+/**
  * Fonction qui récupère le dernier pion
  * d'une liste de pions
  * @param {Array} listeJetonAllignes - Liste
@@ -62,6 +79,22 @@ function EstSurLaMemeColonne(listeJetonAllignes, pion) {
     }
     else {
         return listeJetonAllignes[0] == pion[0]
+    }
+}
+/**
+ * Fonction qui vérifie si le dernier pion d'une liste
+ * est sur la même ligne (X) qu'un pion donné
+ * @param {Array} listeJetonAllignes 
+ * @param {Array} pion 
+ * @returns Boolean
+ */
+function EstSurLaMemeLigne(listeJetonAllignes, pion) {
+    // Si la liste est une liste a 1 dimension
+    if (RecupDernierJeton(listeJetonAllignes)[1] != undefined) {
+        return RecupDernierJeton(listeJetonAllignes)[1] == pion[1]
+    }
+    else {
+        return listeJetonAllignes[1] == pion[1]
     }
 }
 /**
@@ -124,30 +157,86 @@ function isWinner_horizontal(Px, Py, Color) {
 }
 
 function isWinner_vertical(Px, Py, Color) {
-    for (let i = 0; i < Px; i++) {
-        let Surbrillance = [];
-        let count = 0;
-        let couleur, calc, calc2;
-        for (let j = 0; j < Py; j++) {
-            couleur = $('.row[val] .icon[case="' + (i + 1) + '"]').eq((j)).attr('team');
-            if (couleur == Color) {
-                calc = i + 1;
-                calc2 = j + 1;
-                Surbrillance.push([calc2, calc]);
-                count++;
-                if (count >= 4) {
-                    return Surbrillance;
+    // Vérification en verticale
+    let couleur;
+    let retour = false;
+    const maListeDePions = jeton.get(Color);
+    // Clonage de la liste de pions pour la manipulation
+    let listeVariableDePions =  JSON.parse(JSON.stringify(maListeDePions));
+
+    let listeJetonAllignes = [];
+
+    // Parcours de chaque colonne (x) du tableau
+    let i = 0;
+    let indexPion = 0;
+    while (i < Px && !retour) {
+        // Pour chaque colonne, on compte le nombre de pions
+        // de la couleur actuel
+        listeVariableDePions.forEach(unPion => {
+            // Si le pion est sur cette colonne (x) :
+            if (unPion[0] == (i+1)) {
+                listeJetonAllignes.push(unPion);
+                // On supprime de la liste des pions non utilisés le pion actuel
+                delete listeVariableDePions[indexPion];
+                if (APlusDe4PionsAlignes(listeJetonAllignes)) {
+                    // On ne peux pas faire de return car nous sommes dans une
+                    // fonction foreach qui ne retourne rien, alors on
+                    // attribut la valeur de retour à la variable retour
+                    retour = listeJetonAllignes;
                 }
-            } else {
-                Surbrillance = [];
-                count = 0;
+            }
+            indexPion++;
+        });
+        // On change de colonne
+        i++;
+        listeJetonAllignes = GetListeVide();
+    }
+    if (retour) {
+        return retour;
+    }
+    else {
+        return false;
+    }
+
+
+    maListeDePions.forEach(unPion => {
+        // Si la liste est vide, on entre le jeton
+        if (GetTailleListe(listeJetonAllignes) == 0) {
+            listeJetonAllignes.push(unPion);
+        }
+        else {
+            // Si la liste n'est pas vide, et que le jeton est sur la meme ligne
+            // que le jeton précedent
+            if (EstSurLaMemeLigne(listeJetonAllignes, unPion)) {
+                // Si le pion est en dessous du dernier pion, alors on l'ajoute a la liste
+                if (LePionEstIlEnBasDuDernierPion(listeJetonAllignes, unPion)) {
+                    listeJetonAllignes.push(unPion);
+                    if (APlusDe4PionsAlignes(listeJetonAllignes)) {
+                        // On ne peux pas faire de return car nous sommes dans une
+                        // fonction foreach qui ne retourne rien, alors on
+                        // attribut la valeur de retour à la variable retour
+                        retour = listeJetonAllignes;
+                    }
+                }
+                else {
+                    listeJetonAllignes = GetListeVide();
+                    listeJetonAllignes = unPion;
+                }
+            }
+            // Si le pion est sur une ligne différente (X différent), alors on
+            // réinitialise la liste et on insère un nouveau pion
+            else {
+                listeJetonAllignes = GetListeVide();
+                listeJetonAllignes = [unPion];
             }
         }
-        if (count >= 4) {
-            return Surbrillance;
-        }
+    });
+    if (retour) {
+        return retour;
     }
-    return false;
+    else {
+        return false;
+    }
 }
 
 function isWinner_diagonalTopLeft(Px, Py, Color) {
