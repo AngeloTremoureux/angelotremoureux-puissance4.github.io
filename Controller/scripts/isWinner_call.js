@@ -45,12 +45,12 @@ function isWinner_horizontal(Px, Py, Color) {
                 }
                 else {
                     Surbrillance = [];
-                    Surbrillance = unPion;
+                    Surbrillance = [unPion];
                 }
             }
             else {
                 Surbrillance = [];
-                Surbrillance = unPion;
+                Surbrillance = [unPion];
             }
         }
         //console.log("Surbrillance: " + Surbrillance)
