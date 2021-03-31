@@ -33,7 +33,7 @@ function isWinner_horizontal(Px, Py, Color) {
                     console.log("S:" + Surbrillance);
                     console.log("PUSH1 : " + jeton.listPionTeam1);
                     
-                    Surbrillance.push(unPion);
+                    Surbrillance.push([unPion]);
                     console.log("S:" + Surbrillance);
                     console.log("PUSH2 : " + jeton.listPionTeam1);
                     //console.log("len:" + Surbrillance.length);
