@@ -97,6 +97,24 @@ function EstSurLaMemeLigne(listeJetonAllignes, pion) {
         return listeJetonAllignes[1] == pion[1]
     }
 }
+function EstVide(liste){
+    return GetTailleListe(liste) == 0;
+}
+/**
+ * Fonction qui compare la 2ème valeur d'une liste
+ * avec 2 dimensions (utilisé dans une fonction de tri : sort)
+ * @param {BigInteger} a 
+ * @param {BigInteger} b 
+ * @returns {Boolean}
+ */
+function CompareSecondeColonne(a, b) {
+    if (a[1] === b[1]) {
+        return 0;
+    }
+    else {
+        return (a[1] < b[1]) ? -1 : 1;
+    }
+}
 /**
  * Fonction qui vérifie s'il y a un gagnant
  * au Puissance 4 en vérifiant seulement horizontalement
@@ -108,17 +126,17 @@ function EstSurLaMemeLigne(listeJetonAllignes, pion) {
  */
 
 function isWinner_horizontal(Px, Py, Color) {
-    // Vérification en horizontal
     let couleur;
     let retour = false;
     const maListeDePions = jeton.get(Color);
+    // Tri la liste en fonction de leur Y
     maListeDePions.sort();
 
     let listeJetonAllignes = [];
 
     maListeDePions.forEach(unPion => {
         // Si la liste est vide, on entre le jeton
-        if (GetTailleListe(listeJetonAllignes) == 0) {
+        if (EstVide(listeJetonAllignes)) {
             listeJetonAllignes.push(unPion);
         }
         else {
@@ -155,53 +173,27 @@ function isWinner_horizontal(Px, Py, Color) {
         return false;
     }
 }
-
+/**
+ * Fonction qui vérifie s'il y a un gagnant
+ * au Puissance 4 en vérifiant seulement verticalement
+ * (Nombre de pions >= 4 sur la même ligne)
+ * @param {BigInteger} Px - Largeur du tableau
+ * @param {BigInteger} Py - Hauteur du tableau
+ * @param {BigInteger} Color - Couleur de l'équipe
+ * @returns Boolean - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
+ */
 function isWinner_vertical(Px, Py, Color) {
-    // Vérification en verticale
     let couleur;
     let retour = false;
     const maListeDePions = jeton.get(Color);
-    // Clonage de la liste de pions pour la manipulation
-    let listeVariableDePions =  JSON.parse(JSON.stringify(maListeDePions));
+    // Tri la liste en fonction de leur X
+    maListeDePions.sort(CompareSecondeColonne);
 
     let listeJetonAllignes = [];
 
-    // Parcours de chaque colonne (x) du tableau
-    let i = 0;
-    let indexPion = 0;
-    while (i < Px && !retour) {
-        // Pour chaque colonne, on compte le nombre de pions
-        // de la couleur actuel
-        listeVariableDePions.forEach(unPion => {
-            // Si le pion est sur cette colonne (x) :
-            if (unPion[0] == (i+1)) {
-                listeJetonAllignes.push(unPion);
-                // On supprime de la liste des pions non utilisés le pion actuel
-                delete listeVariableDePions[indexPion];
-                if (APlusDe4PionsAlignes(listeJetonAllignes)) {
-                    // On ne peux pas faire de return car nous sommes dans une
-                    // fonction foreach qui ne retourne rien, alors on
-                    // attribut la valeur de retour à la variable retour
-                    retour = listeJetonAllignes;
-                }
-            }
-            indexPion++;
-        });
-        // On change de colonne
-        i++;
-        listeJetonAllignes = GetListeVide();
-    }
-    if (retour) {
-        return retour;
-    }
-    else {
-        return false;
-    }
-
-
     maListeDePions.forEach(unPion => {
         // Si la liste est vide, on entre le jeton
-        if (GetTailleListe(listeJetonAllignes) == 0) {
+        if (EstVide(listeJetonAllignes)) {
             listeJetonAllignes.push(unPion);
         }
         else {
@@ -220,7 +212,7 @@ function isWinner_vertical(Px, Py, Color) {
                 }
                 else {
                     listeJetonAllignes = GetListeVide();
-                    listeJetonAllignes = unPion;
+                    listeJetonAllignes = [unPion];
                 }
             }
             // Si le pion est sur une ligne différente (X différent), alors on
