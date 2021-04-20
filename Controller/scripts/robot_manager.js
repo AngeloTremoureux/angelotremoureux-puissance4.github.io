@@ -1,4 +1,6 @@
 function setBot(Color) {
+    monTour.set(false);
+    game.unSelect();
     let Px = game.getPx();
     let Py = game.getPy();
     resetGame();
@@ -6,67 +8,76 @@ function setBot(Color) {
 }
 
 function RobotVsRobot(Py, Px, Color) {
-    let returnKey = setRobot(Py, Px, Color);
-    setMatch(returnKey, Px, Py, Color);
+    ajouteUnPionRobot(Py, Px, Color);
+
+    setTimeout(function () {
+        let listeDeCasesAlignes = verifWin(Px, Py, Color);
+        // Si des cases sont alignés, c'est qu'il y a un gagnant
+        if (listeDeCasesAlignes) {
+            if (Color == 'yellow') {
+                game.log("Puissance 4", "Les Jaunes ont gagnés !");
+                $('#game p#tour').text('Les Jaunes ont gagnés !');
+                setWinner(listeDeCasesAlignes);
+                
+            }
+            else {
+                game.log("Puissance 4", "Les Rouges ont gagnés !");
+                $('#game p#tour').text('Les Rouges ont gagnés !');
+                setWinner(listeDeCasesAlignes);
+            }
+        }
+        else {
+            if (Color == 'yellow') {
+                RobotVsRobot(Px, Py, 'red');
+            }
+            else {
+                RobotVsRobot(Px, Py, 'yellow');
+            }
+            
+        }
+    }, 50);
 }
 
-function setRobot(Py, Px, Color) {
-    let liste = [];
-    for (let i = 1; i <= Px; i++) {
-        let el = $(".row[val=1] .icon[case='" + i + "']").attr('team');
-        if (!el) {
-            liste.push(i);
+function getListePionsAJouer() {
+    // Liste contenant la liste des pions qui peuvent encore
+    // être jouer par le joueur actuel
+    let listePionsAJouer = [];
+    const listeDePionsRed = jeton.get('red');
+    const listeDePionsYellow = jeton.get('yellow');
+
+    // On parcours chaque case horizontale du jeux
+    for (let i = 1; i <= game.getPx(); i++) {
+        // Si un pion d'une liste des 2 équipes est en
+        // haut du jeux, alors aucune pièce ne peut être joué.
+        if (
+            !(ListeContientElleListe(listeDePionsRed, [1, i]))
+            && !(ListeContientElleListe(listeDePionsYellow, [1, i]))
+            )
+        {
+            listePionsAJouer.push(i);
         }
     }
-    let num2 = Math.floor((Math.random() * liste.length + 2) - 1);
-    let num = liste[num2 - 1];
-    // On parcours la liste des cases encore jouables
-    let onlyOne;
-    for (let i = liste.length; i > 0; i--) {
-        onlyOne = true;
-        // On cherche la première case disponible
-        for (let j = Py; j > 0; j--) {
-            let teamColor = $(".row[val='" + j + "'] .icon[case='" + liste[i - 1] + "']").attr('team');
-            if (!teamColor && onlyOne) {
-                onlyOne = false;
-                $(".row[val='" + j + "'] .icon[case='" + liste[i - 1] + "']").attr('team', 'red');
-                let isWinner_red = verifWin(Px, Py, 'red');
-                $(".row[val='" + j + "'] .icon[case='" + liste[i - 1] + "']").attr('team', 'yellow');
-                let isWinner_yellow = verifWin(Px, Py, 'yellow');
-                $(".row[val='" + j + "'] .icon[case='" + liste[i - 1] + "']").attr('team', '');
-                if (isWinner_red || isWinner_yellow) {
-                    num = liste[i - 1];
-                }
-            }
-        }
+    return listePionsAJouer;
+}
+
+function ajouteUnPionRobot(Py, Px, Color) {
+    const maListeDePions = jeton.get(Color);
+
+    // Liste des lignes encore jouables
+    let listePionsAJouer = getListePionsAJouer(Color);
+
+    if (listePionsAJouer.length > 0) {
+         // On génère un nombre aléatoire entre 1 et
+        // le nombre de pièces restantes compris
+        let nombreAleatoireDePionsAJouer = Math.floor((Math.random() * listePionsAJouer.length + 2) - 1);
+        // On choisis le pion X correspondante du
+        // nombre aléatoire généré
+        let unPionAleatoireQuiPeuxEtreJouer = listePionsAJouer[nombreAleatoireDePionsAJouer - 1];
+
+        jeton.add(unPionAleatoireQuiPeuxEtreJouer, Color);
+        return 1;
     }
-    if (!num) {
-        $('#game p#tour').text('La partie est nulle !');
-        return 2;
-    } else {
-        let boucleActive = true;
-        let i = Py;
-        while (i > 0 && boucleActive) {
-            let teamColor = $(".row[val='" + i + "'] .icon[case='" + num + "']").attr('team');
-            if (!teamColor) {
-                boucleActive = false;
-                $(".row[val='" + i + "'] .icon[case='" + num + "']").replaceWith(searchPiece(Color, num))
-                $(".row[val='" + i + "'] .icon[case='" + num + "']").attr('team', Color);
-                monTour.set(true);
-                jeton.set(2, [i, num]);
-                $('#game p#tour').text('A ton tour !');
-                isWinner = verifWin(Px, Py, Color);
-                if (isWinner) {
-                    setWinner(isWinner);
-                    return true;
-                } else {
-                    return false;
-                }
-
-            }
-            i--;
-        }
+    else {
+        return -1;
     }
-
-
 }

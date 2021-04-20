@@ -1,3 +1,34 @@
+var pion = pion || (function () {
+    var coordPionX;
+    var coordPionY;
+    return {
+        /**
+         * Initialise un pion
+         * @param {BigInteger} y
+         * @param {BigInteger} x
+         */
+        init: function (y, x) {
+            this.coordPionX = x
+            this.coordPionY = y;
+        },
+        getArray: function() {
+            return [coordPionY, coordPionX];
+        },
+        getX: function() {
+            return coordPionX;
+        },
+        getY: function() {
+            return coordPionY;
+        },
+        setX: function(x) {
+            this.coordPionX = x;
+        },
+        setY: function(y) {
+            this.coordPionY = y;
+        }
+    }
+});
+
 var jeton = jeton || (function () {
     var listPionTeam2; // Team yellow
     var listPionTeam1; // Team red
@@ -6,12 +37,55 @@ var jeton = jeton || (function () {
             this.listPionTeam1 = new Array();
             this.listPionTeam2 = new Array();
         },
-        add: function (event) {
+        click: function (clickPx, Color) {
+            if (monTour.get()) {
+                Px = game.getPx(); // Longueur horizontale du puissance 4
+                Py = game.getPy(); // Longueur verticale du puissance 4
+
+                let num = parseInt(clickPx); // Case horizontale du clique
+                this.add(num, Color);
+                monTour.set(false);
+                isWinner = verifWin(Px, Py, Color);
+                if (isWinner) {
+                    setWinner(isWinner);
+                    $('#game p#tour').text('Tu as gagné !');
+                    game.log("Puissance 4", "Gagné ! Bien joué");
+                    game.unSelect();
+                }
+                else {
+                    $('#game p#tour').text('Au tour de l\'adversaire!');
+                    game.unSelect();
+                    setTimeout(function () {
+                        // On récupère le callback et on ajoute un pion
+                        let callbackPion = ajouteUnPionRobot(Py, Px, 'yellow');
+                        if (callbackPion == -1) {
+                            $('#game p#tour').text('Egalité !');
+                            game.log("Puissance 4", "Egalité !");
+                        }
+                        else {
+                            // Si le bot est gagnant
+                            if (verifWin(Px, Py, 'yellow')) {
+                                $('#game p#tour').text('Damn ! Tu as perdu !');
+                                game.log("Puissance 4", "Perdu ! :(");
+                            }
+                            // S'il n'y a pas de gagnant
+                            else {
+                                $('#game p#tour').text('A ton tour !');
+                                monTour.set(true);
+                            }
+                            
+                            
+                        }
+                    }, 50);
+                }
+            }
+        },
+        add: function (clickPx, Color) {
 
             Px = game.getPx(); // Longueur horizontale du puissance 4
             Py = game.getPy(); // Longueur verticale du puissance 4
 
-            let num = parseInt($(event).attr('case')); // Case horizontale du clique
+            let num = parseInt(clickPx); // Case horizontale du clique
             
             if (num == null || num > game.getPx())
             {
@@ -19,7 +93,6 @@ var jeton = jeton || (function () {
             }
             else
             {
-                let placeIsNotTaken = true;
                 let compteur = Py;
                 let jetonHasTeam = false;
                 var table;
@@ -30,38 +103,24 @@ var jeton = jeton || (function () {
                     {
                         // Variable compteur = jeton en Y
                         // Variable num = jeton en X
-                        table = [compteur, num];
+                        let monPion = new pion();
+                        monPion.init(compteur, num);
+
                         // Si le pion de la boucle est dans la liste des pions de l'équipe rouge
-                        jetonHasTeam = isItemInArray(this.listPionTeam1, table);
+                        jetonHasTeam = ContientPion(this.listPionTeam1, monPion);
                         if (!jetonHasTeam) {
                             // Si le pion ne l'est pas, est-il dans la liste des pions de l'équipe jaune :
-                            jetonHasTeam = isItemInArray(this.listPionTeam2, table);
+                            jetonHasTeam = ContientPion(this.listPionTeam2, monPion);
                         }
+                        // Si le pion n'a toujours pas d'équipe
                         if (!jetonHasTeam) {
-                            this.set(1, [compteur, num]);
+                            
+                            this.set(Color, monPion);
                             $(".row[val='" + compteur + "'] .icon").attr('surbrillance', '');
-                            $(".row[val='" + compteur + "'] .icon[case='" + num + "']").replaceWith(searchPiece('red', num));
-                            $(".row[val='" + compteur + "'] .icon[case='" + num + "']").attr('team', 'red');
-                            game.select(event, Py);
-                            monTour.set(false);
+                            $(".row[val='" + compteur + "'] .icon[case='" + num + "']").replaceWith(searchPiece(Color, num));
+                            $(".row[val='" + compteur + "'] .icon[case='" + num + "']").attr('team', Color);
+
                             jetonHasTeam = true;
-                            isWinner = verifWin(Px, Py, 'red');
-                            if (isWinner) {
-                                setWinner(isWinner);
-                                $('#game p#tour').text('Tu as gagné !');
-                                game.log("Puissance 4", "Gagné ! Bien joué");
-                                game.unSelect();
-                            } else {
-                                $('#game p#tour').text('Au tour de l\'adversaire!');
-                                setTimeout(function () {
-                                    if (setRobot(Py, Px, 'yellow')) {
-                                        $('#game p#tour').text('Damn ! Tu as perdu !');
-                                        game.log("Puissance 4", "Perdu ! :(");
-                                        monTour.set(false);
-                                        game.unSelect();
-                                    }
-                                }, 50);
-                            }
                         }
                         else {
                             // La case est occupé, on refais un tour de boucle
@@ -71,20 +130,19 @@ var jeton = jeton || (function () {
                     }
                     game.log("Puissance 4", "Jeton en X:" + num + " Y:" + (compteur + 1));
 
-                } else
+                }
+                 else
                 {
                     throw "Emplacement de pion inatteignable";
                 }
             }
         },
         set: function (team, value) {
-            if (team == 1)
+            if (team == 1 || team == 'red')
             {
                 this.listPionTeam1.push(value);
-                this.listPionTeam1 = this.removeDoublons(this.listPionTeam1);
-            } else if (team == 2) {
+            } else if (team == 2 || team == 'yellow') {
                 this.listPionTeam2.push(value);
-                this.listPionTeam2 = this.removeDoublons(this.listPionTeam2);
             } else {
                 throw "Le joueur est introuvable";
             }
@@ -123,6 +181,20 @@ var jeton = jeton || (function () {
         }
     };
 }());
+
+/**
+ * Vérifie si une liste contient une liste
+ * @param {Array<pion>} array 
+ * @param {Array} item 
+ */
+function ContientPion(listeDePions, pion) {
+    listeDePions.forEach(element => {
+        if (Pio(element).getArray() == pion(element).getArray()) {
+            return true;
+        }
+    });
+    return false;
+}
 
 function isItemInArray(array, item) {
     for (var i = 0; i < array.length; i++) {

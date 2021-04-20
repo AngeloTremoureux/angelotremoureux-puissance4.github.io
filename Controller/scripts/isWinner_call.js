@@ -116,23 +116,45 @@ function CompareSecondeColonne(a, b) {
     }
 }
 /**
+ * Fonction qui vérifie si une liste contient
+ * une autre liste
+ * @param {Array} arr Liste principale : contenant
+ * @param {Array} subarr Liste qui est contenue
+ * @returns {Boolean}
+ */
+function ListeContientElleListe(arr, subarr){
+    for(var i = 0; i<arr.length; i++){
+        let checker = false
+        for(var j = 0; j<arr[i].length; j++){
+            if(arr[i][j] === subarr[j]){
+                checker = true
+            } else {
+                checker = false
+                break;
+            }
+        }
+        if (checker){
+            return true
+        }
+    }
+    return false
+}
+/**
  * Fonction qui vérifie s'il y a un gagnant
  * au Puissance 4 en vérifiant seulement horizontalement
  * (Nombre de pions >= 4 sur la même colonne)
  * @param {BigInteger} Px - Largeur du tableau
  * @param {BigInteger} Py - Hauteur du tableau
  * @param {BigInteger} Color - Couleur de l'équipe
- * @returns Boolean - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
+ * @returns {Boolean} - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
  */
 
 function isWinner_horizontal(Px, Py, Color) {
     let couleur;
     let retour = false;
     const maListeDePions = jeton.get(Color);
-    // Tri la liste en fonction de leur Y
-    maListeDePions.sort();
 
-    let listeJetonAllignes = [];
+    let listeJetonAllignes = GetListeVide();
 
     maListeDePions.forEach(unPion => {
         // Si la liste est vide, on entre le jeton
@@ -162,6 +184,8 @@ function isWinner_horizontal(Px, Py, Color) {
             // réinitialise la liste et on insère un nouveau pion
             else {
                 listeJetonAllignes = GetListeVide();
+                // Ne pas oublier d'inséré le pion en tant que liste "[ ]"
+                // Sinon la liste deviendra une liste a 1 dimension
                 listeJetonAllignes = [unPion];
             }
         }
@@ -180,7 +204,7 @@ function isWinner_horizontal(Px, Py, Color) {
  * @param {BigInteger} Px - Largeur du tableau
  * @param {BigInteger} Py - Hauteur du tableau
  * @param {BigInteger} Color - Couleur de l'équipe
- * @returns Boolean - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
+ * @returns {Boolean} - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
  */
 function isWinner_vertical(Px, Py, Color) {
     let couleur;
@@ -189,8 +213,8 @@ function isWinner_vertical(Px, Py, Color) {
     // Tri la liste en fonction de leur X
     maListeDePions.sort(CompareSecondeColonne);
 
-    let listeJetonAllignes = [];
-
+    let listeJetonAllignes = GetListeVide();
+    console.log("iswinner vertical : " + Color + " : " + maListeDePions);
     maListeDePions.forEach(unPion => {
         // Si la liste est vide, on entre le jeton
         if (EstVide(listeJetonAllignes)) {
@@ -203,6 +227,7 @@ function isWinner_vertical(Px, Py, Color) {
                 // Si le pion est en dessous du dernier pion, alors on l'ajoute a la liste
                 if (LePionEstIlEnBasDuDernierPion(listeJetonAllignes, unPion)) {
                     listeJetonAllignes.push(unPion);
+                    console.log("XPUSH " + Color + " : " + unPion + " [Liste: " + listeJetonAllignes)
                     if (APlusDe4PionsAlignes(listeJetonAllignes)) {
                         // On ne peux pas faire de return car nous sommes dans une
                         // fonction foreach qui ne retourne rien, alors on
@@ -213,6 +238,7 @@ function isWinner_vertical(Px, Py, Color) {
                 else {
                     listeJetonAllignes = GetListeVide();
                     listeJetonAllignes = [unPion];
+                    console.log("NO PUSH FOR " + Color + " : " + unPion)
                 }
             }
             // Si le pion est sur une ligne différente (X différent), alors on
@@ -230,68 +256,118 @@ function isWinner_vertical(Px, Py, Color) {
         return false;
     }
 }
-
+/**
+ * Fonction qui vérifie s'il y a un gagnant
+ * au Puissance 4 en vérifiant seulement en diagonale
+ * en commencant par la case en haut a gauche
+ * (Nombre de pions >= 4 sur la même diagonale croissante)
+ * @param {BigInteger} Px - Largeur du tableau
+ * @param {BigInteger} Py - Hauteur du tableau
+ * @param {BigInteger} Color - Couleur de l'équipe
+ * @returns {Boolean} - Vrai si l'équipe est gagnante - Faux si elle ne l'est pas.
+ */
 function isWinner_diagonalTopLeft(Px, Py, Color) {
-    let parseVal = 4, returnParseVal = 4;
-    let couleur, CombienDeMonter, count;
-    let parseCaseBas = 2;
-    let parseCase = 1;
-    let Surbrillance = [];
-    const nombreDeBoucle = Px + Py - 7;
-    for (let i = 0; i < nombreDeBoucle; i++) {
-        count = 0;
-        if (parseVal <= Py) {
-            // Vérifier la ligne en diagonale
-            for (let j = 0; j < returnParseVal; j++) {
-                couleur = $('.row[val="' + parseVal + '"] .icon[case="' + parseCase + '"]').attr('team');
-                if (couleur == Color) {
-                    Surbrillance.push([parseVal, parseCase]);
-                    count++;
-                    if (count >= 4) {
-                        return Surbrillance;
-                    }
-                } else {
-                    count = 0;
-                    Surbrillance = [];
+    // On souhaite manipuler les pions, on clone alors la liste
+    // pour éviter de modifier les valeurs de celle-ci
+    // (Les paramètres sont passés par références)
+    let maListeDePionsVariable = JSON.parse(JSON.stringify(jeton.get(Color)));
+    let localisationYDeLaPiecePiece = 4, nombreDePieceAVerifier = 4;
+    let localisationXDeLaPiece = 1;
+    let unPion;
+    let retour = false;
+    let listeJetonAllignes = [];
+    // Nombre de boucles à faire :
+    // Hauteur du tableau - 3
+    // On ne compte pas les 3 premiers et 3 derniers car au minimum
+    // ils ne peuvent pas contenir 4 jetons et donc être gagnants
+    const nombreDeBoucleAFaireVerticale = Py - 3;
+    // Il faut enlever 1 de plus car la ligne diagonale du milieu
+    // (où Y = 1) est prise en compte par la boucle verticale.
+    const nombreDeBoucleAFaireHorizontale = Px - 4;
+    let i = 0;
+    while(i < nombreDeBoucleAFaireVerticale && nombreDePieceAVerifier >= 4 && !retour) {
+        // Cas où nous sommes en train de vérifier
+        // la partie gauche du tableau
+        for (let j = 0; j < nombreDePieceAVerifier; j++) {
+            unPion = [localisationYDeLaPiecePiece, localisationXDeLaPiece];
+            if (ListeContientElleListe(maListeDePionsVariable, unPion)) {
+                listeJetonAllignes.push(unPion);
+                if (APlusDe4PionsAlignes(listeJetonAllignes)) {
+                    retour = listeJetonAllignes;
                 }
-                parseVal--;
-                parseCase++;
             }
-            parseCase = 1;
-            returnParseVal++;
-            parseVal = returnParseVal;
-        } else {
-            count = 0;
-            parseCase = parseCaseBas;
-            CombienDeMonter = Px - 1;
-            Surbrillance = [];
-            parseVal = Py;
-            if (CombienDeMonter >= 4) {
-                // Vérifier la ligne en diagonale
-                for (let j = 0; j < CombienDeMonter; j++) {
-                    couleur = $('.row[val="' + parseVal + '"] .icon[case="' + parseCase + '"]').attr('team');
-                    if (couleur == Color) {
-                        Surbrillance.push([parseVal, parseCase]);
-                        count++;
-                        if (count >= 4) {
-                            return Surbrillance;
-                        }
-                    } else {
-                        count = 0;
-                        Surbrillance = [];
-                    }
-                    parseVal--;
-                    parseCase++;
-                }
-                CombienDeMonter--;
-                parseCaseBas++;
+            // Le pion n'est pas en diagonale, on vide la liste
+            else {
+                listeJetonAllignes = GetListeVide();
             }
-            parseVal = Py;
-            returnParseVal++;
-            parseVal = returnParseVal;
+            localisationYDeLaPiecePiece--;
+            localisationXDeLaPiece++;
         }
+        // On change de colonne, alors :
+        // On change la position X à 1
+        localisationXDeLaPiece = 1;
+        // On incrémente de 1 le nombre de pièces à vérifier
+        nombreDePieceAVerifier++;
+        // La localisation Y est égale au nombre de pièces à vérifier
+        // Si nous avons 5 pièces à vérifier, c'est que la position Y
+        // est égale à 5.
+        localisationYDeLaPiecePiece = nombreDePieceAVerifier;
+        i++;
     }
-    return false;
+    nombreDePieceAVerifier = Px - 2;
+    // Localisation X de la pièce qui permettra de vérifier
+    // la diagonale en s'éincrémentant a chaque fois
+    localisationXDeLaPiece = 2;
+    // Localisation X de la pièce qui restera sur la ligne
+    // du bas permettant de revenir au début d'une diagonale
+    let tempLocalisationBaseXDeLaPiece = 2;
+    i = 0;
+    // Cas où nous sommes en train de vérifier
+    // la partie du basse du tableau
+    // Boucle de chaque diagonale
+    while (i < nombreDeBoucleAFaireHorizontale && nombreDePieceAVerifier >= 4 && !retour) {
+        // La localisation X de la pièce est égale à 2 au départ
+        // et s'incrémente à chaque fois
+        listeJetonAllignes = GetListeVide();
+        // On pars toujours de la pièce qui est sur la ligne du bas
+        localisationYDeLaPiecePiece = Py;
+        // Pour chaque pièce à vérifier :
+        for (let j = 0; j < nombreDePieceAVerifier; j++) {
+            unPion = [localisationYDeLaPiecePiece, localisationXDeLaPiece];
+            if (ListeContientElleListe(maListeDePionsVariable, unPion)) {
+                listeJetonAllignes.push([localisationYDeLaPiecePiece, localisationXDeLaPiece]);
+                if (APlusDe4PionsAlignes(listeJetonAllignes)) {
+                    retour = listeJetonAllignes;
+                }
+            }
+            else {
+                listeJetonAllignes = GetListeVide();
+            }
+            // On change de pion : on passe sur le pion du dessus
+            // Donc on décrémente la localisation Y de la pièce actuelle
+            localisationYDeLaPiecePiece--;
+            // et on incrémente la localisation X de la pièce actuelle
+            localisationXDeLaPiece++;
+        }
+        // On a finit de vérifier une diagonale
+        // on passe a la suivante :
+        // On décrémente le nombre de pièces à vérifier de 1
+        nombreDePieceAVerifier--;
+        // On incrémente la localisation X de la base de 1
+        tempLocalisationBaseXDeLaPiece++;
+        // On reviens en bas du puissance 4
+        localisationXDeLaPiece = tempLocalisationBaseXDeLaPiece;
+        // Incrémente le compteur
+        i++;
+        
+    }
+    if (retour) {
+        return retour;
+    }
+    else {
+        return false;
+    }
+    
 }
 
 function isWinner_diagonalTopRight(Px, Py, Color) {

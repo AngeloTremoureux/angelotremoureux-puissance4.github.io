@@ -50,7 +50,7 @@ var game = game || (function () {
 
             $("#game .icon").click(function (event) {
                 if (monTour.get()) {
-                    jeton.add($(this), Py, Px);
+                    //jeton.add($(this).attr('case'), 'red');
                 }
             });
             $("#game .icon").mouseover(function (event) {
@@ -72,17 +72,32 @@ var game = game || (function () {
 
     };
 }());
+
+function send(e) {
+    $.ajax({
+         type: "POST",
+         url: '/ajax.php',
+         data:
+         {action:'call_this'},
+         success:function(html) {
+           alert(html);
+         }
+
+    });
+}
+
 var monTour = monTour || (function () {
-    var monTour;
+    var aQuiLeTour;
     return {
-        set: function (boolMonTour) {
-            this.monTour = boolMonTour;
+        set: function (team) {
+            this.aQuiLeTour = team;
         },
         get: function () {
-            return this.monTour;
+            return this.aQuiLeTour;
         }
     };
 }());
+
 jQuery(document).ready(function ($) {
     $("html").keydown(function () {
         let canPlay = monTour.get();

@@ -1,3 +1,8 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteRule ^account/register$  /index.php?register=true [L]
+RewriteRule ^account/login$  /index.php?login=true [L]
+
 ErrorDocument 400 /Controller/error.php
 ErrorDocument 401 /Controller/error.php
 ErrorDocument 403 /Controller/error.php
