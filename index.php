@@ -1,16 +1,42 @@
 <?php
 
+session_start();
+
 $rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_NUMBER_INT);
 $rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_NUMBER_INT);
-$register = filter_input(INPUT_GET, 'register', FILTER_SANITIZE_STRING);
+$logout = filter_input(INPUT_GET, 'logout', FILTER_SANITIZE_STRING);
 
-if (!empty($rowX) && is_int($rowY) && !empty($rowY) && is_int($rowX))
+if (isset($_SESSION['username'], $_SESSION['playerId']) && empty($logout))
 {
-    require('Controller/game.php');
-    $game = new game('View/v_game.php', $rowX, $rowY);
-
-    require($game->getTemplate());
+    $isConnected = true;
+    
 }
 else {
-    require('View/v_login.php');
+    $isConnected = false;
+}
+
+$target = filter_input(INPUT_GET, 'target', FILTER_SANITIZE_STRING);
+switch ($target)
+{
+    case 'login':
+        require('Controller/login.php');
+        break;
+    case 'logout':
+        require('Controller/logout.php');
+        break;
+    case 'register':
+        require('Controller/register.php');
+        break;
+    case 'members':
+        require('Controller/members.php');
+        break;
+    case 'me':
+        require('Controller/profile.php');
+        break;
+    case 'play':
+        require('Controller/play.php');
+        break;
+    default:
+        header('Location: /play');
+        break;
 }

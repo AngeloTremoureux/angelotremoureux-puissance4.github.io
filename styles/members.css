@@ -1,0 +1,58 @@
+table ::selection {
+    background: #7a7a7a;
+    color: white;
+}
+th {
+    padding: 5px 30px;
+}
+#members {
+    margin-left: 50px;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+#members td {
+    padding: 5px;
+    text-align: center;
+}
+#members tr.TableTitle {
+    font-size: 20px;
+    background: #6a9cf8;
+    border: 2px black solid;
+    color: white;
+}
+#members .group-admin {
+    background-size: 170px;
+    background-position-y: 50px;
+    background-position-x: -20px;
+    filter: invert(1);
+    color: white;
+}
+}
+#members th {
+    padding: 5px;
+}
+tr:nth-child(even) {
+    background: #c4d9ff;
+}
+tr:nth-child(odd) {
+    background: #a5c5ff;
+}
+#members .point {
+    text-align: center;
+    display: inline-block;
+}
+#members .point.online {
+    width: 14px;
+    height: 14px;
+    background: #0fa714;
+    border-radius: 50%;
+    border: 1px white solid;
+    box-shadow: 0px 0px 3px black;
+}
+#members .point.offline {
+    width: 14px;
+    height: 14px;
+    background: #474747;
+    border-radius: 50%;
+    border: 1px white solid;
+    box-shadow: 0px 0px 3px black;
+}

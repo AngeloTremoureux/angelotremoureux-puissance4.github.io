@@ -2,6 +2,7 @@
 Order allow,deny
 Allow from all
 </FilesMatch>
-
+<FilesMatch "^uploads\/.*\.mov$">
 Order allow,deny
-Deny from all
+Allow from all
+</FilesMatch>

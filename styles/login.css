@@ -5,3 +5,17 @@
 ::selection {
     background: #bcceff;
 }
+.activeError
+{
+    display: inline-block;
+}
+.successfull {
+    background: #78e5e5;
+    padding: 5px 10px;
+    border: 2px white solid;
+    font-weight: bold;
+    color: wheat;
+    font-size: 12px;
+    margin-bottom: 20px;
+    box-shadow: 1px 1px 7px black;
+}

@@ -4,6 +4,19 @@ if (form) {
       // prevent the form from submitting
       if (!verifFormulaire()) {
          e.preventDefault();
+         // grecaptcha.ready(function() {
+         //    grecaptcha.execute('6LdY4OkaAAAAAOw4RyVGtcwhCbrSkBDwjqrTMbAG', {action: 'create_comment'}).then(function(token) {
+         //       $('#formLogin').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
+         //       $.post("../account/login",{username: username, password: password, token: token}, function(result) {
+         //               console.log(result);
+         //               if(result.success) {
+         //                       alert('Thanks for posting comment.')
+         //               } else {
+         //                       alert('You are spammer ! Get the @$%K out.')
+         //               }
+         //       });
+         //    });
+         // });
       }
    });
 }
@@ -14,11 +27,8 @@ function hideAll() {
    $("#usernameChars").hide();
    $("#passwordLength").hide();
 }
-
-
-
 function verifFormulaire() {
-   const regex = /^([a-zA-Z_-]*)$/g;
+   const regex = /^([a-zA-Z0-9_-]*)$/g;
    let isOk = true;
    hideAll();
    if ($("input#username").val().length < 3 || $("#username").val().length > 20) {

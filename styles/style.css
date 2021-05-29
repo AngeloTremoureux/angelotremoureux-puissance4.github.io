@@ -1,5 +1,145 @@
-@import url('https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap");
+
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+    transition: background-color 0.5s, margin 0.5s;
+    background: inherit;
+}
+.sidenav .icon {
+    background: #585858;
+    box-shadow: 0px 0px 2px 0px black;
+}
+.sidenav .icon:nth-child(odd) {
+    background: #4c4c4c;
+}
+.iconi {
+    float: left;
+    margin-top: -8px;
+    margin-left: -55px;
+}
+.sidenav h2 {
+    color: #ffd355;
+    font-style: italic;
+    font-family: "Patrick Hand SC", cursive;
+    font-weight: bold;
+    text-align: center;
+    font-size: 40px;
+    text-shadow: 1px 1px 1px black;
+    padding: 10px;
+}
+
+.sidenav .actual {
+    color: #f1f1f1;
+}
+
+.icon i.fas.fa-coffee {
+    margin-left: -3px;
+}
+
+.icon a p {
+    display: inline-block;
+    margin-bottom: 0;
+    left: 60px;
+    position: absolute;
+}
+
+.sidenav a:hover i.fa-door-open {
+    color: #aeffba;
+}
+
+.sidenav a:hover i.fa-circle {
+    color: #779bff;
+}
+
+.sidenav a:hover i.fa-user-circle {
+    color: #aeffba;
+}
+
+.sidenav a:hover i.fa-coffee {
+    color: #ffd355;
+}
+
+.sidenav a:hover i.fa-sign-out-alt {
+    color: #fc98a6;
+}
+
+.sidenav a:hover i.fa-key {
+    color: #cbec8e;
+}
+
+.sidenav a:hover i.fa-door-open {
+    color: #ffbfec;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #595959;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+.sidenav a,
+.sidenav div {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    white-space: nowrap;
+}
+
+.sidenav a,
+.sidenav div,
+.sidenav i {
+    transition: 0.3s;
+}
+
+.sidenav a:hover,
+.sidenav a:hover i {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#panel {
+    transition: margin-left 0.5s, opacity 0.2s;
+    padding: 16px;
+    font-family: "Noto Sans JP", sans-serif;
+}
+#panel span {
+    font-size: 15px;
+    cursor: pointer;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
 
 html {
     background: radial-gradient(#ffffff, #d6dbff);
@@ -15,7 +155,7 @@ html {
 }
 #box h2 {
     text-align: center;
-    font-family: 'Patrick Hand SC', cursive;
+    font-family: "Patrick Hand SC", cursive;
     font-size: 3em;
     font-style: italic;
     text-shadow: 1px 8px 16px #0052e8;
@@ -47,7 +187,7 @@ html {
     background: none;
 }
 #game p {
-    font-family: 'Yusei Magic', sans-serif;
+    font-family: "Yusei Magic", sans-serif;
     text-transform: uppercase;
     color: white;
     font-weight: bold;
@@ -58,27 +198,27 @@ html {
     height: 60px;
     width: 60px;
     margin: 5px;
-    stroke-opacity: .5;
+    stroke-opacity: 0.5;
     cursor: pointer;
 }
 
-#game .icon[team='red'] {
+#game .icon[team="red"] {
     fill: red;
 }
-#game .icon[team='blue'] {
+#game .icon[team="blue"] {
     fill: blue;
 }
-#game .icon[surbrillance='red'] {
+#game .icon[surbrillance="red"] {
     fill: red;
-    opacity: .8;
-    animation: survol .6s ease-in-out infinite;
-    -webkit-animation: survol .6s ease-in-out infinite;
+    opacity: 0.8;
+    animation: survol 0.6s ease-in-out infinite;
+    -webkit-animation: survol 0.6s ease-in-out infinite;
 }
-#game .icon[surbrillance='blue'] {
+#game .icon[surbrillance="blue"] {
     fill: blue;
-    opacity: .8;
-    animation: survol .6s ease-in-out infinite;
-    -webkit-animation: survol .6s ease-in-out infinite;
+    opacity: 0.8;
+    animation: survol 0.6s ease-in-out infinite;
+    -webkit-animation: survol 0.6s ease-in-out infinite;
 }
 
 @keyframes survol {
@@ -115,15 +255,21 @@ html {
         -webkit-transform: scale3d(1, 1, 1);
         transform: scale3d(1, 1, 1);
     }
-    10%, 20% {
-        -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-        transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    10%,
+    20% {
+        -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+        transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
     }
-    30%, 50%, 70%, 90% {
+    30%,
+    50%,
+    70%,
+    90% {
         -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
         transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
     }
-    40%, 60%, 80% {
+    40%,
+    60%,
+    80% {
         -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
         transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
     }
@@ -137,15 +283,21 @@ html {
         -webkit-transform: scale3d(1, 1, 1);
         transform: scale3d(1, 1, 1);
     }
-    10%, 20% {
-        -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-        transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    10%,
+    20% {
+        -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+        transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
     }
-    30%, 50%, 70%, 90% {
+    30%,
+    50%,
+    70%,
+    90% {
         -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
         transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
     }
-    40%, 60%, 80% {
+    40%,
+    60%,
+    80% {
         -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
         transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
     }

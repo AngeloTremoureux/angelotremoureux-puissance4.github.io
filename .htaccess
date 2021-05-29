@@ -1,7 +1,12 @@
 Options +FollowSymlinks
 RewriteEngine on
-RewriteRule ^account/register$  /index.php?register=true [L]
-RewriteRule ^account/login$  /index.php?login=true [L]
+RewriteRule ^account/register$  /index.php?target=register [L]
+RewriteRule ^account/login$  /index.php?target=login [L]
+RewriteRule ^account/login?(.*+)$  /index.php?target=login&$1 [L]
+RewriteRule ^account/logout$  /index.php?target=logout [L]
+RewriteRule ^account/me$  /index.php?target=me [L]
+RewriteRule ^play$  /index.php?target=play [L]
+RewriteRule ^members$  /index.php?target=members [L]
 
 ErrorDocument 400 /Controller/error.php
 ErrorDocument 401 /Controller/error.php
