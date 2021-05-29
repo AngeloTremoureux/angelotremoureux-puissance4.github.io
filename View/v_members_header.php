@@ -4,6 +4,7 @@
         <title><?= $title ?></title>
         <meta charset="utf-8">
         <script src="https://kit.fontawesome.com/f1e20245fc.js" crossorigin="anonymous"></script>
+        <link rel="icon" href="../Model/images/pion_bleu.png" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="/styles/style.css">
         <link rel="stylesheet" type="text/css" href="/styles/members.css">
