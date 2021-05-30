@@ -75,7 +75,7 @@ class SessionRegister {
             $donnees = $requete->fetch();
             return (($donnees[0]));
         }
-        catch (Exception $e)
+        catch (Throwable $e)
         {
             throw new Exception($e->getMessage());
         }
@@ -87,16 +87,16 @@ class SessionRegister {
         {
             try {
                 $bdd = $this->bdd;
-                $requete = $bdd->prepare('INSERT INTO `player`(`username`, `pass`, `lastLogin`, `isConnected`, `isAdmin`) VALUES (:username, :pass, :lastLogin, :isConnected, :isAdmin)');
+                $requete = $bdd->prepare('INSERT INTO `player`(`username`, `pass`, `lastActivity`, `isConnected`, `isAdmin`) VALUES (:username, :pass, :lastActivity, :isConnected, :isAdmin)');
                 $requete->execute(array(
                     'username' => $this->getUsername(),
                     'pass' => $this->getPassword(),
-                    'lastLogin' => null,
+                    'lastActivity' => date("Y-m-d H:i:s"),
                     'isConnected' => 0,
                     'isAdmin' => 0
                 )) or die(print_r($requete->errorInfo()));
             }
-            catch (Exception $e)
+            catch (Throwable $e)
             {
                 throw new Exception($e->getMessage());
             }

@@ -24,12 +24,8 @@ th {
     background-size: 170px;
     background-position-y: 50px;
     background-position-x: -20px;
-    filter: invert(1);
-    color: white;
-}
-}
-#members th {
-    padding: 5px;
+    color: black;
+    font-weight: bold;
 }
 tr:nth-child(even) {
     background: #c4d9ff;

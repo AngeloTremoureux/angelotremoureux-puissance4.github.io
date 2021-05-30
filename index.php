@@ -1,6 +1,8 @@
 <?php
 
 session_start();
+date_default_timezone_set('Europe/Paris');
+
 
 $rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_NUMBER_INT);
 $rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_NUMBER_INT);
@@ -14,6 +16,8 @@ if (isset($_SESSION['username'], $_SESSION['playerId']) && empty($logout))
 else {
     $isConnected = false;
 }
+
+require('Controller/sessionRooter.php');
 
 $target = filter_input(INPUT_GET, 'target', FILTER_SANITIZE_STRING);
 switch ($target)
