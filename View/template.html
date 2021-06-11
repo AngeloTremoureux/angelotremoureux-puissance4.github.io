@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        {{ include('header.html') }}
+    </head>
+    <body>
+        {% include('nav.html') with data.head %}
+        {% include(data.content.uriTemplate) with data.content %}
+    </body>
+</html>
+

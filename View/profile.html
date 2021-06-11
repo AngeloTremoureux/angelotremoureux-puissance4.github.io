@@ -1,0 +1,98 @@
+<div id="page">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="module">
+                        <div class="header">
+                            <span class="online">Connecté</span>
+                            <span class="align-right">{{ session.createdAccount }}</span>
+                        </div>
+                        <div class="profile-image">
+                            <img src="/Model/images/icon.jpg" alt="Photo de profile">
+                        </div>
+                        <div class="content">
+                            <h2>{{ session.username }}</h2>
+                            <div class="informations">
+                                <h3>Informations privées</h3>
+                                <hr>
+                                <form action="editprofile" method="post">
+                                    <div class="line">
+                                        <span>Pays: {{session.country}} </span><a href="#"
+                                            class="align-right spaced">[modifier]</a>
+                                    </div>
+                                    <div class="line">
+                                        <span>Adresse e-mail:
+                                            {% if session.email is empty %}
+                                                Aucune
+                                            {% else %}
+                                                {{session.email}}
+                                            {% endif %}
+                                        </span><a href="#" class="align-right spaced">[modifier]</a>
+                                    </div>
+                                    <div class="line">
+                                        <span>Mot-de-passe: *********</span>
+                                        <a href="#" class="align-right spaced">[modifier]</a>
+                                    </div>
+                                </form>
+                                <hr>
+                                <div class="line">
+                                    <span><a href="#">Supprimer mon compte et ses données</a></span>
+
+                                </div>
+                                <div class="line">
+                                    <span><a href="#">Voir les CGU</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="module">
+                        <div class="part">
+                            <span class="name">Amis ({{friends|length}})</span>
+                            <div class="widget-content">
+                                {% if friends|length > 0 %}
+                                    {% for playerData in friends %}
+                                        <div class='case-friend'>
+                                            <img src='{{playerData.1}}' title='{{playerData.0}}'>
+                                            {% if playerData.2 %}
+                                            <div class='info-logged online' title="Ce joueur est en ligne"></div>
+                                            {% else %}
+                                            <div class='info-logged offline' title="Ce joueur est hors ligne"></div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <span>Me laisse pas solo</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="part">
+                            <span class="name">Historique des parties</span>
+                            <div class="widget-content">
+                                <div class="partie"><span class="vs">AngeloTMX <span class="mid">vs.</span>
+                                        Admin</span><span class="state victory align-right">Victoire</span></div>
+                                <div class="partie"><span class="vs">AngeloTMX <span class="mid">vs.</span>
+                                        Robot</span><span class="state victory align-right">Victoire</span></div>
+                                <div class="partie"><span class="vs">AngeloTMX <span class="mid">vs.</span>
+                                        Robot</span><span class="state loose align-right">Défaite</span></div>
+                                <div class="partie"><span class="vs">AngeloTMX <span class="mid">vs.</span>
+                                        Admin4</span><span class="state victory align-right">Victoire</span></div>
+                                <div class="partie"><span class="vs">AngeloTMX <span class="mid">vs.</span>
+                                        AngeloTMX2</span><span class="state loose align-right">Défaite</span></div>
+                            </div>
+                        </div>
+                        <div class="part">
+                            <span class="name">Statistiques</span>
+                            <div class="widget-content">
+                                <div class="line"><span>Nombres de parties jouées: 4</span></div>
+                                <div class="line"><span>Ratio V/D : 1.00/1.00</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

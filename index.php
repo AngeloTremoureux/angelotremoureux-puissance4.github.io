@@ -1,44 +1,55 @@
 <?php
 
 session_start();
+
 date_default_timezone_set('Europe/Paris');
+require_once(__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/Controller/pdo.php');
 
+use App\SessionRooter as SessionRooter;
 
-$rowX = filter_input(INPUT_GET, 'x', FILTER_SANITIZE_NUMBER_INT);
-$rowY = filter_input(INPUT_GET, 'y', FILTER_SANITIZE_NUMBER_INT);
-$logout = filter_input(INPUT_GET, 'logout', FILTER_SANITIZE_STRING);
-
-if (isset($_SESSION['username'], $_SESSION['playerId']) && empty($logout))
-{
+if (isset($_SESSION['username'], $_SESSION['playerId']) && empty($logout)) {
     $isConnected = true;
-    
-}
-else {
+    try {
+        $_SESSION['sess'] = new SessionRooter();
+        $_SESSION['sess']->setActivity($dbh, $_SESSION['playerId']);
+    } catch (Throwable $e) {
+        //throw new Exception($e->getMessage());
+    }
+} else {
     $isConnected = false;
-}
-
-require('Controller/sessionRooter.php');
+};
 
 $target = filter_input(INPUT_GET, 'target', FILTER_SANITIZE_STRING);
-switch ($target)
-{
+
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/View');
+$twig = new \Twig\Environment($loader, [
+    //'cache' => __DIR__ . '/cache',
+]);
+
+$twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('isConnected', $isConnected);
+$twig->addGlobal('currentPage', $target);
+
+switch ($target) {
     case 'login':
-        require('Controller/login.php');
+        require('Controller/pages/login.php');
         break;
     case 'logout':
-        require('Controller/logout.php');
+        require('Controller/pages/logout.php');
         break;
     case 'register':
-        require('Controller/register.php');
+        require('Controller/pages/register.php');
         break;
     case 'members':
-        require('Controller/members.php');
+        require('Controller/pages/members.php');
         break;
     case 'me':
-        require('Controller/profile.php');
+        require('Controller/pages/profile.php');
         break;
     case 'play':
-        require('Controller/play.php');
+        require('Controller/pages/play.php');
         break;
     default:
         header('Location: /play');

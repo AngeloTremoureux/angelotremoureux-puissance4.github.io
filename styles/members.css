@@ -37,6 +37,18 @@ tr:nth-child(odd) {
     text-align: center;
     display: inline-block;
 }
+div#arrows {
+    margin-left: 40px;
+}
+div#arrows a[href='#'] {
+    color: slategray;
+}
+div#arrows a {
+    padding: 10px;
+    font-size: 20px;
+    text-decoration: none;
+    color: #3053ff;
+}
 #members .point.online {
     width: 14px;
     height: 14px;

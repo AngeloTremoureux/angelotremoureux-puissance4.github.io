@@ -1,0 +1,21 @@
+<title>{{ data.head.title }}</title>
+    <meta charset="utf-8">
+
+    <link rel="icon"       type="image/png" href="/public/picture/pion_bleu.png">
+    <link rel="stylesheet" type="text/css"  href="/public/stylesheet/style.css">
+    <link rel="stylesheet" type="text/css"  href="/public/stylesheet/ext/fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css"  href="/public/stylesheet/ext/bootstrap.css">
+    {% for link in data.head.links %}
+        <link rel="stylesheet" type="text/css"  href="/public/stylesheet/{{ link }}">
+    {% endfor %}
+
+    <script type="text/javascript" src="/public/script/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/public/script/panel.js"></script>
+    <script type="text/javascript" src="/public/script/lazyLoaderFa.js"></script>
+    {% for script in data.head.scripts %}
+        {% if script['out'] %}
+            <script src="{{ script.src }}"></script>
+        {% else %}
+            <script src="/public/script/{{ script }}"></script>
+        {% endif %}
+    {% endfor %}

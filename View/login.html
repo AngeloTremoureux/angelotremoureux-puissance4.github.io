@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div id="box">
+        <h2>Connexion</h2>
+        <div id="game">
+            <form id="formLogin form" action="../account/login" method="post">
+                <div class="mb-3 align">
+                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                    <input type="text" class="form-control" name="username" id="username"
+                    value="{{ data.content.username is defined ? data.content.username : '' }}" aria-describedby="username">
+                </div>
+                <div class="mb-3 align">
+                    <label for="password" class="form-label">Mot-de-passe</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" data-sitekey="6LdY4OkaAAAAAOw4RyVGtcwhCbrSkBDwjqrTMbAG"
+                    data-callback='onSubmit'data-action='submit'
+                    class="btn btn-primary g-recaptcha">Connexion</button>
+                    
+                </div>
+                <div class="mb-1">
+                    <a href="/account/register" class="btn btn-secondary">Je n'ai pas de compte</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% if data.content.exception is not empty %}
+    <div class="position-fixed bottom-0 right-0 p-3 animate__upper" style="z-index: 5; right: 0; bottom: 0;">
+        <div class="alert alert-danger shadow-lg p-3" role="alert">
+            {{ data.content.exception }}
+        </div>
+    </div>
+{% elseif data.content.accountJustCreatedBefore %}
+    <div class="position-fixed bottom-0 right-0 p-3 animate__upper" style="z-index: 5; right: 0; bottom: 0;">
+        <div class="alert alert-danger shadow-lg p-3" role="alert">
+            Votre compte a bien été créée. Veuillez vous connecter.
+        </div>
+    </div>
+{% endif %}
+<script type="text/javascript" src="/Controller/scripts/login.js"></script>

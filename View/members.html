@@ -1,0 +1,35 @@
+<div id="arrows">
+    {% if page > 1 %}
+        <a href="members" title="Première page">&#8606;</a>
+        <a href="members-{{page-1}}" title="Page précédente">&#8592;</a>
+    {% else %}
+        <a href="#">&#8606;</a>
+        <a href="#">&#8592;</a>
+    {% endif %}
+    {% if page < lastpage %}
+        <a href="members-{{page+1}}" title="Page suivante">&#8594;</a>
+        <a href="members-{{lastpage}}" title="Dernière page">&#8608;</a>
+    {% else %}
+        <a href="#">&#8594;</a>
+        <a href="#">&#8608;</a>
+    {% endif %}
+</div>
+
+<table id="members">
+    <tr class="TableTitle">
+        <th>#</th>
+        <th>Nom d'utilisateur</th>
+        <th>Date d'enregistrement</th>
+        <th>En ligne</th>
+    </tr>
+
+    {{ members }}
+    
+{% if index == printLimitFrom + 1 %}
+    <tr class='row{{ index }}'>
+        <td></td><td>Aucun utilisateur trouvé</td>
+        <td></td>
+        <td></td>
+    </tr>
+{% endif %}
+</table>

@@ -67,6 +67,43 @@ body {
         opacity: 1;
     }
 }
+.case-friend {
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: .2s;
+    position: relative;
+}
+
+.case-friend img:hover {
+    filter: opacity(0.8);
+}
+.module .header span.align-right {
+    text-transform: capitalize;
+}
+.info-logged {
+    width: 13px;
+    height: 13px;
+    margin: 0;
+    position: absolute;
+    bottom: 3px;
+    box-shadow: -1px 0px 4px black;
+    right: 3px;
+    border-radius: 50%;
+    border: 1px white solid;
+}
+.info-logged.offline {
+    background: radial-gradient(#737373, #333333);
+}
+.info-logged.online {
+    background: radial-gradient(#2fff74, #044402);
+}
+.case-friend img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 2px black;
+    border: 1px #313131 solid;
+}
 .usrtooltip p.rank span {
     text-shadow: 1px 1px 1px black;
 }
@@ -109,7 +146,22 @@ body {
     text-shadow: 1px 1px 1px black;
     padding: 10px;
 }
-
+.lazyloaderFa {
+    opacity: 0;
+}
+.animate__upper {
+    animation: upper 1s 1;
+}
+@keyframes upper {
+    from {
+        margin-bottom: 5%;
+        opacity: 0
+    }
+    to {
+        margin-bottom: 0;
+        opacity: 1
+    }
+}
 .sidenav .actual {
     color: #f1f1f1;
 }
@@ -119,10 +171,12 @@ body {
 }
 
 .icon a p {
-    display: inline-block;
-    margin-bottom: 0;
     left: 60px;
     position: absolute;
+    text-transform: uppercase;
+    font-size: 18px;
+    margin-top: 6px;
+    font-weight: bold;
 }
 
 .sidenav a:hover i.fa-door-open {
@@ -185,6 +239,7 @@ body {
 .sidenav a:hover,
 .sidenav a:hover i {
     color: #f1f1f1;
+    text-decoration: none;
 }
 
 .sidenav .closebtn {
@@ -241,18 +296,21 @@ html {
     text-align: center;
     font-weight: bold;
 }
-#game {
-    background: #6a91ff;
-    text-align: center;
-    padding: 20px;
-    border: 3px black solid;
-    width: max-content;
+.load-transition {
     -webkit-animation-name: tada;
     animation-name: tada;
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+}
+#game {
+    background: #6a91ff;
+    text-align: center;
+    padding: 20px;
+    border: 3px black solid;
+    width: max-content;
+    
 
     margin-bottom: 10px;
 }

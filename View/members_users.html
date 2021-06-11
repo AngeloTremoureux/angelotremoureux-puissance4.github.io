@@ -1,0 +1,22 @@
+<tr class='row{{ index }}'>
+<td><b>{{ index }}</b></td>
+{% if data.isAdmin %}
+    <td><div class="group-admin usrtooltip">{{ data.username }}
+        <span class="tooltipcontent"><p class="username">{{ data.username }}</p>
+            <br/><p class="rank">Rang: <span>Administrateur</span></p>
+        </span>
+    </div></td>
+{% else %}
+    <td><div class="usrtooltip">{{ data.username }}
+        <span class="tooltipcontent"><p class="username">{{ data.username }}</p>
+            <br/><p class="rank">Rang: <span>Joueur</span></p>
+        </span>
+    </div></td>
+{% endif %}
+<td>{{ data.createdAccount|date('d\/m\/Y \à H\hi') }}</td>
+{% if 'now'|date('Y-m-d H:i:s') - data.lastActivity <= 300 %}
+    <td><div class="point online" title="Actuellement en ligne"></div></td>
+{% else %}
+    <td><div class="point offline" title="Actuellement hors ligne"></div></td>
+{% endif %}
+</tr>
